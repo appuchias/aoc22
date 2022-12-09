@@ -50,7 +50,7 @@ def is_overlapped(assignment: tuple[tuple[int, int], tuple[int, int]]) -> bool:
     return any([i in range2 for i in range1]) or any([i in range1 for i in range2])
 
 
-def main(fp: str = "sample.txt"):
+def main(fp: str = "04/sample.txt"):
     # Part 1
     assignments = load_assignments(fp)
     contained = list(map(is_assignment_contained, assignments))
@@ -64,4 +64,4 @@ def main(fp: str = "sample.txt"):
 
 if __name__ == "__main__":
     # main()
-    main("input.txt")
+    main("04/input.txt")
