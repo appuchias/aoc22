@@ -46,6 +46,7 @@ def get_top_elves_calories(elves: list[list[int]], n: int = 3) -> list[int]:
 
 
 def main(fp: str = "sample.txt"):
+    # Part 1
     elves = get_elves(fp)
     heaviest_elf_idx, heaviest_elf_calories = get_heaviest_elf_idx_and_calories(elves)
     print(
@@ -55,6 +56,7 @@ def main(fp: str = "sample.txt"):
         + str(heaviest_elf_calories)
     )
 
+    # Part 2
     top_three = get_top_elves_calories(elves, 3)
 
     print(f"Top three elves carry a total of {sum(top_three)} calories")

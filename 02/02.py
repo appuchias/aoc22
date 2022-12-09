@@ -78,6 +78,7 @@ def get_play(play: tuple[int, int]) -> tuple[int, int]:
 
 
 def main(fp: str = "sample.txt"):
+    # Part 1
     plays = load_guide(fp)
     scores = []
     for play in plays:
@@ -85,6 +86,7 @@ def main(fp: str = "sample.txt"):
 
     print(f"Total score is: {sum(scores)}")
 
+    # Part 2
     plays = [(get_play(play)) for play in plays]
     scores = []
     for play in plays:
