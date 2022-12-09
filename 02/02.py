@@ -4,6 +4,10 @@
 
 
 def load_guide(fp: str) -> list[tuple[int, int]]:
+    """
+    Turns the text guide into tuples of `int`s, with
+    `0` meaning `rock`, `1` meaning `paper` and `2` meaning scissors."""
+
     with open(fp, "r") as f:
         lines = f.readlines()
 
