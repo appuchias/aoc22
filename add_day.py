@@ -8,11 +8,16 @@ def create_day(day: str) -> None:
 # Advent of Code 22 - Day {int(day)}
 
 
-def load_() -> ...:
-    ...
+def load_(fp: str) -> ...:
+    with open(fp, "r") as f:
+        content = f.read()
 
 
 def main(fp: str = "{day}/sample.txt"):
+    # Part 1
+    ...
+
+    # Part 2
     ...
 
 
