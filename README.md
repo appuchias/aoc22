@@ -8,6 +8,9 @@
 
 These are my solutions to the [Advent of Code 2022](https://adventofcode.com/2022) challenges.
 
+If you want to use this as a template, you can create the base files using `python add_day.py <day>`.
+This will create the files for the day.
+
 ## License
 
 This project is licensed under the [GPLv3 license](https://github.com/appuchias/aoc22/blob/master/LICENSE).
