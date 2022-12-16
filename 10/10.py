@@ -24,7 +24,14 @@ def load_instructions(fp: str) -> list[tuple[str, int] | tuple[str]]:
 def run_instructions(
     instructions: list[tuple], x: int, screen: str = ""
 ) -> int | tuple[int, str]:
+    """
+    Runs the instructions provided, updates the `x` register
+    and draws the `screen` if one is provided.
+    """
+
     def draw_screen(screen, position, x) -> str:
+        """Add the corresponding character to the screen"""
+
         if not screen:
             return ""
 
