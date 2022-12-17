@@ -21,9 +21,20 @@ def main(fp: str = "samples/{day}.txt"):
     ...
 
 
+def p1(fp: str) -> None:
+    _ = load_(fp)
+
+
+def p2(fp: str) -> None:
+    _ = load_(fp)
+
+
 if __name__ == "__main__":
-    main()
-    # main(inputs/"{day}.txt")
+    fp = "samples/{day}.txt"
+    # fp = "inputs/{day}.txt"
+
+    p1(fp)
+    p2(fp)
 """
 
     with open(f"{day}.py", "w") as f:
