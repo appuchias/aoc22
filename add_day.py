@@ -26,11 +26,12 @@ if __name__ == "__main__":
     # main(inputs/"{day}.txt")
 """
 
-    os.mkdir(day)
     with open(f"{day}.py", "w") as f:
         f.write(content)
     open(f"inputs/{day}.txt", "x").close()
     open(f"samples/{day}.txt", "x").close()
+
+    os.system(f"code -a {day}.py inputs/{day}.txt samples/{day}.txt")
 
 
 if __name__ == "__main__":
