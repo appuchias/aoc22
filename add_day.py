@@ -10,12 +10,12 @@ def create_day(day: str) -> None:
 
 def load_(fp: str) -> ...:
     with open(fp, "r") as f:
-        content = f.read()
+        content = f.readlines()
 
 
-def main(fp: str = "{day}/sample.txt"):
+def main(fp: str = "samples/{day}.txt"):
     # Part 1
-    ...
+    _ = load_(fp)
 
     # Part 2
     ...
@@ -23,13 +23,14 @@ def main(fp: str = "{day}/sample.txt"):
 
 if __name__ == "__main__":
     main()
+    # main(inputs/"{day}.txt")
 """
 
     os.mkdir(day)
-    with open(f"{day}/{day}.py", "w") as f:
+    with open(f"{day}.py", "w") as f:
         f.write(content)
-    open(f"{day}/input.txt", "x").close()
-    open(f"{day}/sample.txt", "x").close()
+    open(f"inputs/{day}.txt", "x").close()
+    open(f"samples/{day}.txt", "x").close()
 
 
 if __name__ == "__main__":
