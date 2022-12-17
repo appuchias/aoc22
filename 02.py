@@ -81,7 +81,7 @@ def get_play(play: tuple[int, int]) -> tuple[int, int]:
         return p1, p1 + 1
 
 
-def main(fp: str = "02/sample.txt"):
+def main(fp: str = "samples/02.txt"):
     # Part 1
     plays = load_guide(fp)
     scores = []
@@ -100,4 +100,4 @@ def main(fp: str = "02/sample.txt"):
 
 
 if __name__ == "__main__":
-    main("02/input.txt")
+    main("inputs/02.txt")

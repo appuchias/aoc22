@@ -77,7 +77,7 @@ def run_instructions(
     return total
 
 
-def main(fp: str = "10/sample.txt"):
+def main(fp: str = "samples/10.txt"):
     instructions = load_instructions(fp)
     x = 1
 
@@ -96,4 +96,4 @@ def main(fp: str = "10/sample.txt"):
 
 if __name__ == "__main__":
     # main()
-    main("10/input.txt")  # 13440, PBZGRAZA
+    main("inputs/10.txt")  # 13440, PBZGRAZA

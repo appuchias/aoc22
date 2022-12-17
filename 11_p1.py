@@ -62,7 +62,7 @@ def run_rounds(
     return monkeys, inspections
 
 
-def main(fp: str = "11/sample.txt"):
+def main(fp: str = "samples/11.txt"):
     # Part 1
     monkeys = load_monkeys(fp)
     monkeys, inspections = run_rounds(monkeys)
@@ -76,4 +76,4 @@ def main(fp: str = "11/sample.txt"):
 
 if __name__ == "__main__":
     # main()
-    main("11/input.txt")
+    main("inputs/11.txt")

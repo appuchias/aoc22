@@ -69,7 +69,7 @@ def move_rope(
     return head, tail
 
 
-def main(fp: str = "09/sample.txt"):
+def main(fp: str = "samples/09.txt"):
     instructions = load_instructions(fp)
 
     # Part 1
@@ -115,5 +115,5 @@ def main(fp: str = "09/sample.txt"):
 
 if __name__ == "__main__":
     main()
-    main("09/input.txt")  # 6256
+    main("inputs/09.txt")  # 6256
     # main("09/sample2.txt")

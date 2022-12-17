@@ -45,7 +45,7 @@ def get_top_elves_calories(elves: list[list[int]], n: int = 3) -> list[int]:
     return top
 
 
-def main(fp: str = "01/sample.txt"):
+def main(fp: str = "samples/01.txt"):
     # Part 1
     elves = get_elves(fp)
     heaviest_elf_idx, heaviest_elf_calories = get_heaviest_elf_idx_and_calories(elves)
@@ -63,5 +63,5 @@ def main(fp: str = "01/sample.txt"):
 
 
 if __name__ == "__main__":
-    input_file = "01/input.txt"
+    input_file = "inputs/01.txt"
     main(input_file)

@@ -25,7 +25,7 @@ def find_start(ds: str, n: int) -> int:
     return -1
 
 
-def main(fp: str = "06/sample.txt"):
+def main(fp: str = "samples/06.txt"):
     # Part 1
     ds = read_datastream(fp)
 
@@ -40,4 +40,4 @@ def main(fp: str = "06/sample.txt"):
 
 
 if __name__ == "__main__":
-    main("06/input.txt")
+    main("inputs/06.txt")

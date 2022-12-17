@@ -89,7 +89,7 @@ def find_dict_sizes(tree: dict) -> Iterable[int]:
                     yield i
 
 
-def main(fp: str = "07/sample.txt"):
+def main(fp: str = "samples/07.txt"):
     # Part 1
     commands = load_commands(fp)
     tree = build_tree(commands)
@@ -112,4 +112,4 @@ def main(fp: str = "07/sample.txt"):
 
 
 if __name__ == "__main__":
-    main("07/input.txt")
+    main("inputs/07.txt")

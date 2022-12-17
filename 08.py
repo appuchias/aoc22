@@ -78,7 +78,7 @@ def scenic_score(trees: list[list[int]], row: int, col: int) -> int:
     return top * bottom * left * right
 
 
-def main(fp: str = "08/sample.txt"):
+def main(fp: str = "samples/08.txt"):
     # Part 1
     trees = load_trees(fp)
 
@@ -99,4 +99,4 @@ def main(fp: str = "08/sample.txt"):
 
 
 if __name__ == "__main__":
-    main("08/input.txt")
+    main("inputs/08.txt")

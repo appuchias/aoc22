@@ -61,7 +61,7 @@ def get_badges(rucksacks: list[tuple[str, str]], n: int = 3) -> list[str]:
     return common_items
 
 
-def main(fp: str = "03/sample.txt"):
+def main(fp: str = "samples/03.txt"):
     # Part 1
     rucksacks = load_rucksacks(fp)
     common_items = list(map(get_common_items, rucksacks))
@@ -76,4 +76,4 @@ def main(fp: str = "03/sample.txt"):
 
 if __name__ == "__main__":
     # main()
-    main("03/input.txt")
+    main("inputs/03.txt")

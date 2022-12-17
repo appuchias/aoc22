@@ -77,7 +77,7 @@ def move(
     return stacks
 
 
-def main(fp: str = "05/sample.txt"):
+def main(fp: str = "samples/05.txt"):
     # Part 1
     piles, instructions = load_stacks(fp)
     stacks = create_stacks(piles)
@@ -97,4 +97,4 @@ def main(fp: str = "05/sample.txt"):
 
 
 if __name__ == "__main__":
-    main("05/input.txt")
+    main("inputs/05.txt")
