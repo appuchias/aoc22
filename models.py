@@ -1,7 +1,8 @@
 #! /usr/bin/env python3
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import List
+from math import sqrt
 
 
 @dataclass(frozen=True, order=True, eq=True)
@@ -41,3 +42,7 @@ def _get_adjacent(p: Point) -> List[Point]:
         Point(p.x, p.y - 1),
         Point(p.x - 1, p.y),
     ]
+
+
+def distance(p1: Point, p2: Point) -> float:
+    return sqrt((p2.x - p1.x) ** 2 + (p2.y - p1.y) ** 2)
