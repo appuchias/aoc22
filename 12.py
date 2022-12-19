@@ -3,8 +3,11 @@
 # Advent of Code 22 - Day 12
 
 from typing import List
-from models import Point
+from models import Point, distance
 from dataclasses import dataclass, field
+
+from time import sleep
+from random import sample
 
 
 @dataclass()
@@ -26,12 +29,19 @@ def load_heightmap(fp: str) -> List[str]:
     return content
 
 
+def parse_hm(hm: List[str]) -> List[List[int]]:
+    return [
+        [ord(char.replace("S", "a").replace("E", "z")) for char in line.strip()]
+        for line in hm
+    ]
+
+
 def find_char(heightmap: List[str], char: str) -> Point:
     p1 = heightmap.index([line for line in heightmap if char in line][0])
     return Point(heightmap[p1].index(char), p1)
 
 
-def point_in_hm(heightmap: List[str], p: Point) -> bool:
+def point_in_hm(heightmap: List[List[int]], p: Point) -> bool:
     boundaries = [
         p.x < 0,
         p.y < 0,
@@ -42,61 +52,120 @@ def point_in_hm(heightmap: List[str], p: Point) -> bool:
 
 
 def highest_adjacents(
-    hm: List[str], path: List[Point], current_char: str, adjacent_p: List[Point]
+    hm: List[List[int]],
+    path: List[Point],
+    current_ord: int,
+    adjacent_p: List[Point],
+    end: Point,
 ) -> List[Point]:
 
+    # Remove points outside hm and points in current path
     adjacent_p = list(
-        filter(None, [p for p in adjacent_p if point_in_hm(hm, p) and p not in path])
+        filter(
+            None,
+            [p for p in adjacent_p if point_in_hm(hm, p) and p not in path],
+        )
     )
 
-    adjacent_c: List[str] = [hm[p.y][p.x].replace("E", "z") for p in adjacent_p]
+    print(f"{adjacent_p=}")
 
-    # Remove points without 0<=Δ<=1 or outside board
-    filter_fn = lambda t: (0 <= (ord(adjacent_c[t[0]]) - ord(current_char)) <= 1)
-    adjacent = list(filter(filter_fn, enumerate(adjacent_p)))
-    # Sort by greatest Δ
-    adjacent = sorted(adjacent, reverse=True, key=lambda t: ord(hm[t[1].y][t[1].x]))
+    # Get highest delta meeting 0<=Δ<=1
+    deltas = list(
+        filter(
+            lambda t: 0 <= t[0] <= 1,
+            map(
+                lambda x, y: (x - current_ord, y),
+                [hm[p.y][p.x] for p in adjacent_p],
+                adjacent_p,
+            ),
+        )
+    )
+
+    if len(deltas) == 0:
+        return list()
+
+    delta = max(deltas)[0]
+    print(f"{deltas=}, {delta=}")
+
+    # Remove points with lower deltas
+    adjacent = [i[1] for i in filter(lambda t: t[0] == delta, deltas)]
+    print(f"{adjacent=}")
+
+    # Sort by smallest distance
+    adjacent = sorted(
+        map(lambda p: (distance(p, end), p), adjacent),
+        reverse=False,
+        key=lambda t: t[0],
+    )
+    print(f"{adjacent=}")
 
     return [i[1] for i in adjacent]
 
+    return sample(adjacent, k=len(adjacent))
 
-def pathfind(hm: List[str], start: Point, end: Point) -> ...:
+
+def pathfind(hm: List[List[int]], start: Point, end: Point) -> Path:
     """Find all paths to go from `start` to `end` following the heightmap (`hm`)."""
 
     finished = False
-    path: Path = Path(start, end, [Point(-1, -1)])
+    path: Path = Path(start, end, [start])
+    dead_ends = set()
 
     current = start
 
     while not finished:
-        current_char = hm[current.y][current.x].replace("S", "a")
+        current_ord = hm[current.y][current.x]
 
         adjacent_p: List[Point] = current.get_adjacent()
 
         for p in adjacent_p:
-            if p == end and (ord("z") - ord(current_char) <= 1):
+            if p == end and (ord("z") - current_ord <= 1):
                 finished = True
                 path.path.append(current)
+                print()
                 break
         else:
-            adjacent = highest_adjacents(hm, path.path, current_char, adjacent_p)
-            print(f"{adjacent=}")
+            adjacent = highest_adjacents(hm, path.path, current_ord, adjacent_p, end)
+            adjacent = list(filter(lambda p: p not in dead_ends, adjacent))
+            print(f"{current=}, {adjacent=}")
 
-            path.path.append(current)
-            current = adjacent[0]
+            if len(adjacent) == 0:
+                prev = path.path.pop(-1)
+                dead_ends.add(current)
+                current = prev
+            else:
+                path.path.append(current)
+                current = adjacent[0]
+
+        print_board(hm, path.path, end)
+        # input()
+        sleep(0.005)
 
     path.path = path.path[1:]
 
     return path
 
 
+def print_board(hm, path, end) -> None:
+    board = [[" " for _ in hm[0]] for _ in hm]
+    # board = [[chr(i) for i in line] for line in hm]
+    for p in path:
+        board[p.y][p.x] = "\033[1m" + chr(hm[p.y][p.x]).upper() + "\033[0m"
+    board[end.y][end.x] = "#"
+    board = "\n".join(["·".join(line) for line in board])
+
+    print(board)
+
+
 def p1(fp: str) -> None:
-    hm = load_heightmap(fp)
-    start, end = find_char(hm, "S"), find_char(hm, "E")
+    str_hm = load_heightmap(fp)
+    start, end = find_char(str_hm, "S"), find_char(str_hm, "E")
     print(f"{start=}, {end=}")
 
+    hm = parse_hm(str_hm)
     path = pathfind(hm, start, end)
-    print(path.path)
+
+    # print(path.path)
     print(len(path.path))
 
 
@@ -106,7 +175,7 @@ def p2(fp: str) -> None:
 
 if __name__ == "__main__":
     fp = "samples/12.txt"
-    # fp = "inputs/12.txt"
+    fp = "inputs/12.txt"
 
     p1(fp)
     p2(fp)
