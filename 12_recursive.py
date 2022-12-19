@@ -60,7 +60,7 @@ def find_path_recursive(
     return path
 
 
-def p1_recursive(fp: str):
+def p1(fp: str):
     heightmap = load_heightmap(fp)
     start, end = find_char(heightmap, "S"), find_char(heightmap, "E")
 
@@ -85,4 +85,4 @@ if __name__ == "__main__":
     fp = "samples/12.txt"
     # fp = "inputs/12.txt"
 
-    p1_recursive(fp)
+    p1(fp)
