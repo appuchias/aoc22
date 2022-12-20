@@ -13,14 +13,6 @@ def load_(fp: str) -> ...:
         content = f.readlines()
 
 
-def main(fp: str = "samples/{day}.txt"):
-    # Part 1
-    _ = load_(fp)
-
-    # Part 2
-    ...
-
-
 def p1(fp: str) -> None:
     _ = load_(fp)
 
