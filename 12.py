@@ -2,7 +2,7 @@
 
 # Advent of Code 22 - Day 12
 
-from typing import List
+from typing import List, Callable
 from dataclasses import dataclass, field
 from time import sleep
 
@@ -38,35 +38,62 @@ def get_height(hm: List[List[int]], p: Point) -> int:
     return hm[p.y][p.x]
 
 
-def is_in_board(hm: List[List[int]], p: Point) -> bool:
-    return not any([p.x < 0, p.y < 0, p.x > len(hm[0]) - 1, p.y > len(hm) - 1])
-
-
 def get_valid_neighbors(
     hm: List[List[int]], n: Node, s: List[Node], c: List[Node]
 ) -> List[Point]:
-    def is_valid(a: Point) -> bool:
-        if is_in_board(hm, a):
+    """
+    Returns a `list` of the adjacent points that
+    can be visited from the current one
+    """
+
+    def is_valid(p: Point) -> bool:
+        """
+        Returns `True` if `p` is in the board, it is reachable
+        and it hasn't been visited before
+        """
+
+        # Check if point in board
+        if not any([p.x < 0, p.y < 0, p.x > len(hm[0]) - 1, p.y > len(hm) - 1]):
+            # Check if it a reachable unvisited point
             return (
-                get_height(hm, a) - get_height(hm, n.point) <= 1
-                and a not in [n.point for n in s]
-                and a not in [n.point for n in c]
+                get_height(hm, p) - p_height <= 1
+                and p not in [n.point for n in s]
+                and p not in [n.point for n in c]
             )
         return False
 
+    p_height = get_height(hm, n.point)
+
+    # Remove invalid adjacent points
     return list(filter(is_valid, n.point.get_adjacent()))
 
 
+def backtrack(completed: list[Node], path: List[Point], start: Point) -> List[Point]:
+    while path[-1] != start:
+        for node in completed:
+            if node.point == path[-1]:
+                path.append(node.previous)
+
+    return path
+
+
 def dijkstra(hm: List[List[int]], start: Point, end: Point) -> List[Point]:
+    """
+    Get the shortest path between `start` and `end` following the heightmap `hm`.
+
+    You can only go up one step but there is no limit going down
+    """
+
     stack = [Node(start, 0, 0)]
     completed = list()
+    path: List[Point] = [end]
 
-    # Loop until end is reached
+    # Loop until no positions left to analyze
     while stack:
         node = stack[0]
         height = get_height(hm, node.point)
 
-        if node == end:
+        if node == end:  # Currently useless but needs a rework
             stack.append(Node(end, ord("z"), 0, completed[-1]))
             continue
 
@@ -92,20 +119,30 @@ def dijkstra(hm: List[List[int]], start: Point, end: Point) -> List[Point]:
             stack.append(neighbor)
 
         completed.append(stack.pop(0))
-        print(f"{stack=}")
 
-        print_board(hm, completed, end)
-        sleep(0.01)
-        # input()
+        print_board(hm, completed, path, end)
 
-    path: List[Point] = [end]
-    while path[-1] != start:
-        for node in completed:
-            if node.point == path[-1]:
-                path.append(completed.pop(completed.index(node)).previous)
+    path = backtrack(completed, path, start)
 
-    # return [n.point for n in completed]
-    return path
+    print_board(hm, completed, path, end)
+
+    return path[1:]
+
+
+def print_board(hm, stack, path, end) -> None:
+    board = [[" " for _ in hm[0]] for _ in hm]
+    # board = [[chr(i) for i in line] for line in hm]
+    for p in [node.point for node in stack]:
+        # board[p.y][p.x] = f"\033[1m{chr(hm[p.y][p.x] + 97)}\033[0m"
+        board[p.y][p.x] = f"{chr(hm[p.y][p.x] + 97)}"
+    for p in path:
+        # board[p.y][p.x] = f"\033[1m{board[p.y][p.x].upper()}\033[0m"
+        board[p.y][p.x] = "·"
+    board[end.y][end.x] = "#"
+    board = "\n".join([":".join(line).strip("\n") for line in board if line])
+
+    print("\n" * 10)
+    print(board)
 
 
 def p1(fp: str) -> None:
@@ -115,23 +152,16 @@ def p1(fp: str) -> None:
 
     path = list(dict.fromkeys(path))
 
-    print(path)
-    print(len(path) - 1)
+    # print(path)
+    print()
+    print(len(path))
 
 
 def p2(fp: str) -> None:
-    _ = load_heightmap(fp)
+    hm, start, end = load_heightmap(fp)
 
-
-def print_board(hm, stack, end) -> None:
-    board = [[" " for _ in hm[0]] for _ in hm]
-    # board = [[chr(i) for i in line] for line in hm]
-    for p in [node.point for node in stack]:
-        board[p.y][p.x] = f"\033[1m{chr(hm[p.y][p.x] + 97)}\033[0m"
-    board[end.y][end.x] = "#"
-    board = "\n".join(["·".join(line) for line in board if line])
-
-    print(board)
+    # Run the algorithm in reverse to find closest `a` to E
+    # Hard to do with the code as I have it as of now.
 
 
 if __name__ == "__main__":
@@ -139,30 +169,4 @@ if __name__ == "__main__":
     fp = "inputs/12.txt"
 
     p1(fp)
-    p2(fp)
-
-    #     nodes = stack.sort_nodes().copy()
-
-    #     if nodes[point].point == end:
-    #         finished = True
-    #         continue
-
-    #     for node in nodes:
-    #         if not is_in_board(hm, node.point):
-    #             continue
-
-    #         adjacent = sorted(
-    #             get_valid_neighbors(hm, node.point, stack),
-    #             key=lambda p: get_height(hm, p),
-    #             reverse=True,
-    #         )
-
-    #         for point in adjacent:
-    #             height = get_height(hm, point)
-    #             print(f"{point=}, {height=}")
-    #             new_node = Node(point, height, distance(point, start))
-    #             new_node.set_previous(node)
-    #             stack.nodes[point] = new_node
-
-    #         stack.completed[node.point] = stack.nodes[node.point]
-    #         del stack.nodes[node.point]
+    # p2(fp)
